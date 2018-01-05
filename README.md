@@ -1,2 +1,2 @@
 # WhatsApp-Scraping
-Python script to get WhatsApp iformation frrom WhatsApp Web
+Python script to get WhatsApp information from WhatsApp Web
