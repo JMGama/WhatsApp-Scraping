@@ -28,6 +28,9 @@ Other supported browsers will have their own drivers available. Links to some of
 ## Browser Profile ```FIREFOX_PATH```
 You need to setup your configuration in the [settings.txt](settings.txt) file.
 In this file you need to specify the profile of your browser where you already scan the QR whit your WhatsaApp account
+<p align="center">
+  <img width="450" height="300" src="http://dl1.cbsistatic.com/i/2017/04/26/6431e906-7aa6-4bc7-bcc2-2f6fc8ec6935/68ef88d0940c3ac784e54869b0bdf1bc/imgingest-8720007773569767113.png">
+</p>
 
 For example we are using the default Firefox profile so we open Firefox and go to https://web.whatsapp.com/ then we scan our QR to login then we can close Firefox and go to search for our profile file that we have in ```/home/user/.mozilla/firefox/xxxxxxxx.default```, now that we localized our file we add the direction to our [settings.txt](settings.txt) file in the FIREFOX_PATH
 
