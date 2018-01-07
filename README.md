@@ -20,6 +20,8 @@ Other supported browsers will have their own drivers available. Links to some of
 * [Firefox](https://github.com/mozilla/geckodriver/releases)
 * [Safari](https://webkit.org/blog/6900/webdriver-support-in-safari-10/)
 
+For more information you can go to the [Selenium Website](http://selenium-python.readthedocs.io/installation.html) at the installation section.
+
 # Settings
 **AT THIS MOMENT WE HAVE THE CODE ONLY WORKING FOR FIREFOX**
 
