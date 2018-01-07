@@ -1,6 +1,6 @@
 """
-importing the libraries that we are going to use
-for loadig the settings file and scraping the website
+Importing the libraries that we are going to use
+for loading the settings file and scraping the website
 """
 import ConfigParser
 import time
@@ -8,7 +8,7 @@ import time
 from selenium import webdriver
 
 
-def asign_settings():
+def assign_settings():
     """
     Loading and assigning global variables from our settings.txt file
     """
@@ -39,19 +39,23 @@ def search_chatter(driver, settings):
                 return
 
 
-"""
-Loading all the configuration and opening the website
-(Firefox profile where whatsapp web is already scanned)
-"""
-SETTINGS = asign_settings()
-FIREFOX_PROFILE = webdriver.FirefoxProfile(SETTINGS['firefox_path'])
-DRIVER = webdriver.Firefox(FIREFOX_PROFILE)
-DRIVER.get(SETTINGS['page'])
+def main():
+    """
+    Loading all the configuration and opening the website
+    (Firefox profile where whatsapp web is already scanned)
+    """
+    settings = assign_settings()
+    firefox_profile = webdriver.FirefoxProfile(settings['firefox_path'])
+    driver = webdriver.Firefox(firefox_profile)
+    driver.get(settings['page'])
 
-search_chatter(DRIVER, SETTINGS)
-"""
-Waiting 10 sec before closing the navigator
-"""
-time.sleep(10)
+    search_chatter(driver, settings)
+    """
+    Waiting 10 sec before closing the navigator
+    """
+    time.sleep(10)
+    driver.close()
 
-DRIVER.close()
+
+if __name__ == '__main__':
+    main()
