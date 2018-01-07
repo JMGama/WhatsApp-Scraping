@@ -1,2 +1,4 @@
 venv/
 geckodriver.log
+.vscode
+mysettings.txt

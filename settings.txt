@@ -1,0 +1,4 @@
+[your-config]
+FIREFOX_PATH = /home/user/.mozilla/firefox/xxxxxxxx.default
+NAME = Person
+PAGE = https://web.whatsapp.com/
