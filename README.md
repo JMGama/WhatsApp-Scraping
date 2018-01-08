@@ -23,7 +23,7 @@ Other supported browsers will have their own drivers available. Links to some of
 >For more information you can go to the [Selenium Website](http://selenium-python.readthedocs.io/installation.html) at the installation section.
 
 # Settings
-**AT THIS MOMENT WE HAVE THE CODE ONLY WORKING FOR FIREFOX**
+**AT THIS MOMENT THE PROJECT ONLY WORKS WITH FIREFOX AND CHROME**
 
 ## Browser Profile ```FIREFOX_PATH```
 You need to setup your configuration in the [settings.txt](settings.txt) file.
