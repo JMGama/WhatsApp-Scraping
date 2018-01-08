@@ -86,7 +86,8 @@ def load_driver(settings):
         pass
     elif settings['browser'] == 'chrome':
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("user-data-dir=" + settings['browser_path'])
+        chrome_options.add_argument(
+            "user-data-dir=" + settings['browser_path'])
         driver = webdriver.Chrome(chrome_options=chrome_options)
     elif settings['browser'] == 'safari':
         pass
@@ -104,8 +105,15 @@ def main():
     driver.get(settings['page'])
 
     search_chatter(driver, settings)
+
+    previous_in_message = ''
     while True:
-        print read_last_in_message(driver)
+        last_in_message = read_last_in_message(driver)
+
+        if previous_in_message != last_in_message:
+            print last_in_message
+            previous_in_message = last_in_message
+
         time.sleep(1)
 
 
