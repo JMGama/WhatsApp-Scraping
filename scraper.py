@@ -86,7 +86,8 @@ def load_driver(settings):
         pass
     elif settings['browser'] == 'chrome':
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("user-data-dir=" + settings['browser_path'])
+        chrome_options.add_argument(
+            "user-data-dir=" + settings['browser_path'])
         driver = webdriver.Chrome(chrome_options=chrome_options)
     elif settings['browser'] == 'safari':
         pass
