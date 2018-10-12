@@ -31,48 +31,6 @@ def load_settings():
     return settings
 
 
-def search_chatter(driver, settings):
-    """
-    Function that search the specified user and activates his chat
-    """
-
-    while True:
-        for chatter in driver.find_elements_by_xpath("//div[@class='_2wP_Y']"):
-            chatter_name = chatter.find_element_by_xpath(
-                ".//span[@class='emojitext ellipsify']").text
-            if chatter_name == settings['name']:
-                chatter.find_element_by_xpath(
-                    ".//div[@class='chat-drag-cover']").click()
-                return
-
-
-def read_last_in_message(driver):
-    """
-    Reading the last message that you got in from the chatter
-    """
-    message = ''
-    for messages in driver.find_elements_by_xpath("//div[@class='msg']"):
-        try:
-            message_container = messages.find_element_by_xpath(
-                ".//div[@class='message message-chat message-in message-chat']"
-            )
-            message = message_container.find_element_by_xpath(
-                ".//span[@class='emojitext selectable-text invisible-space copyable-text']"
-            ).text
-        except NoSuchElementException:
-            try:
-                message_container = messages.find_element_by_xpath(
-                    ".//div[@class='message message-chat message-in tail message-chat']"
-                )
-                message = message_container.find_element_by_xpath(
-                    ".//span[@class='emojitext selectable-text invisible-space copyable-text']"
-                ).text
-            except NoSuchElementException:
-                pass
-
-    return message
-
-
 def load_driver(settings):
     """
     Load the Selenium driver depending on the browser
@@ -93,6 +51,48 @@ def load_driver(settings):
         pass
 
     return driver
+
+
+def search_chatter(driver, settings):
+    """
+    Function that search the specified user and activates his chat
+    """
+
+    while True:
+        for chatter in driver.find_elements_by_xpath("//div[@class='_2wP_Y']"):
+            chatter_name = chatter.find_element_by_xpath(
+                ".//span[@class='_1wjpf']").text
+            if chatter_name == settings['name']:
+                chatter.find_element_by_xpath(
+                    ".//div[@tabindex='-1']").click()
+                return
+
+
+def read_last_in_message(driver):
+    """
+    Reading the last message that you got in from the chatter
+    """
+    message = ''
+    for messages in driver.find_elements_by_xpath("//div[@class='_3_7SH _3DFk6 message-in']"):
+        try:
+            message_container = messages.find_element_by_xpath(
+                ".//div[@class='copyable-text']"
+            )
+            message = message_container.find_element_by_xpath(
+                ".//span[@class='selectable-text invisible-space copyable-text']"
+            ).text
+        except NoSuchElementException:
+            try:
+                message_container = messages.find_element_by_xpath(
+                    ".//div[@class='message message-chat message-in tail message-chat']"
+                )
+                message = message_container.find_element_by_xpath(
+                    ".//span[@class='emojitext selectable-text invisible-space copyable-text']"
+                ).text
+            except NoSuchElementException:
+                pass
+
+    return message
 
 
 def main():
