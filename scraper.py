@@ -84,11 +84,11 @@ def read_last_in_message(driver):
         except NoSuchElementException:
             try:
                 message_container = messages.find_element_by_xpath(
-                    ".//div[@class='message message-chat message-in tail message-chat']"
+                    ".//div[@class='copyable-text']"
                 )
                 message = message_container.find_element_by_xpath(
-                    ".//span[@class='emojitext selectable-text invisible-space copyable-text']"
-                ).text
+                    ".//img[@class='_2DV1k QkfD1 selectable-text invisible-space copyable-text']"
+                ).get_attribute("data-plain-text");
             except NoSuchElementException:
                 pass
 
