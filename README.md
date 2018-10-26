@@ -34,3 +34,4 @@ In this file you need to specify the profile of your browser where you already s
 
 For example we are using the default Firefox profile so we open Firefox and go to https://web.whatsapp.com/ then we scan our QR to login then we can close Firefox and go to search for our profile file that we have in ```/home/user/.mozilla/firefox/xxxxxxxx.default```, now that we localized our file we add the direction to our [settings.txt](settings.txt) file in the FIREFOX_PATH
 
+#### Since the WhatsApp web page constantly changes its class names, this code must be constantly maintained to work with the current class names.
