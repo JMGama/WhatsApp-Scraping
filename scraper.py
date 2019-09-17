@@ -72,31 +72,35 @@ def read_last_in_message(driver):
     """
     Reading the last message that you got in from the chatter
     """
-    message = ""
     for messages in driver.find_elements_by_xpath(
             "//div[contains(@class,'message-in')]"):
         try:
+            message = ""
+            emojis = []
             message_container = messages.find_element_by_xpath(
                 ".//div[@class='copyable-text']")
             message = message_container.find_element_by_xpath(
                 ".//span[contains(@class,'selectable-text invisible-space copyable-text')]"
             ).text
 
-            emojis = []
             for emoji in message_container.find_elements_by_xpath(
                     ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
             ):
                 emojis.append(emoji.get_attribute("data-plain-text"))
 
         except NoSuchElementException:  # In case there are only emojis in the message
-            message_container = messages.find_element_by_xpath(
-                ".//div[@class='copyable-text']")
+            try:
+                message = ""
+                emojis = []
+                message_container = messages.find_element_by_xpath(
+                    ".//div[@class='copyable-text']")
 
-            emojis = []
-            for emoji in message_container.find_elements_by_xpath(
-                    ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
-            ):
-                emojis.append(emoji.get_attribute("data-plain-text"))
+                for emoji in message_container.find_elements_by_xpath(
+                        ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
+                ):
+                    emojis.append(emoji.get_attribute("data-plain-text"))
+            except NoSuchElementException:
+                pass
 
     return message, emojis
 
@@ -112,13 +116,12 @@ def main():
 
     search_chatter(driver, settings)
 
-    previous_in_message = ''
+    previous_in_message = None
     while True:
         last_in_message, emojis = read_last_in_message(driver)
 
         if previous_in_message != last_in_message:
-            print last_in_message
-            print emojis
+            print last_in_message, emojis
             previous_in_message = last_in_message
 
         time.sleep(1)
