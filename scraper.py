@@ -17,10 +17,10 @@ def load_settings():
     config_file_path = 'settings.txt'
     config_parser.read(config_file_path)
 
-    browser = config_parser.get('your-config', 'BROWSER')
-    browser_path = config_parser.get('your-config', 'BROWSER_PATH')
-    name = config_parser.get('your-config', 'NAME')
-    page = config_parser.get('your-config', 'PAGE')
+    browser = config_parser.get('config', 'BROWSER')
+    browser_path = config_parser.get('config', 'BROWSER_PATH')
+    name = config_parser.get('config', 'NAME')
+    page = config_parser.get('config', 'PAGE')
 
     settings = {
         'browser': browser,
@@ -77,8 +77,10 @@ def read_last_in_message(driver):
         try:
             message = ""
             emojis = []
+
             message_container = messages.find_element_by_xpath(
                 ".//div[@class='copyable-text']")
+
             message = message_container.find_element_by_xpath(
                 ".//span[contains(@class,'selectable-text invisible-space copyable-text')]"
             ).text

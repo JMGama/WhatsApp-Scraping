@@ -1,4 +1,4 @@
-[your-config]
+[config]
 BROWSER = firefox or chrome
 BROWSER_PATH = /home/user/.mozilla/firefox/xxxxxxxx.default or /home/user/.config/google-chrome/ (this paths are for Linux)
 NAME = person
