@@ -14,7 +14,7 @@ def load_settings():
     Loading and assigning global variables from our settings.txt file
     """
     config_parser = ConfigParser.RawConfigParser()
-    config_file_path = 'mysettings.txt'
+    config_file_path = 'settings.txt'
     config_parser.read(config_file_path)
 
     browser = config_parser.get('your-config', 'BROWSER')
@@ -44,8 +44,8 @@ def load_driver(settings):
         pass
     elif settings['browser'] == 'chrome':
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument(
-            "user-data-dir=" + settings['browser_path'])
+        chrome_options.add_argument("user-data-dir=" +
+                                    settings['browser_path'])
         driver = webdriver.Chrome(chrome_options=chrome_options)
     elif settings['browser'] == 'safari':
         pass
@@ -59,12 +59,12 @@ def search_chatter(driver, settings):
     """
 
     while True:
-        for chatter in driver.find_elements_by_xpath("//div[@class='_2wP_Y']"):
+        for chatter in driver.find_elements_by_xpath("//div[@class='X7YrQ']"):
             chatter_name = chatter.find_element_by_xpath(
-                ".//span[@class='_1wjpf']").text
+                ".//span[@class='_19RFN']").text
             if chatter_name == settings['name']:
                 chatter.find_element_by_xpath(
-                    ".//div[@tabindex='-1']").click()
+                    ".//div[contains(@class,'_2UaNq')]").click()
                 return
 
 
@@ -72,27 +72,33 @@ def read_last_in_message(driver):
     """
     Reading the last message that you got in from the chatter
     """
-    message = ''
-    for messages in driver.find_elements_by_xpath("//div[@class='_3_7SH _3DFk6 message-in']"):
+    message = ""
+    for messages in driver.find_elements_by_xpath(
+            "//div[contains(@class,'message-in')]"):
         try:
             message_container = messages.find_element_by_xpath(
-                ".//div[@class='copyable-text']"
-            )
+                ".//div[@class='copyable-text']")
             message = message_container.find_element_by_xpath(
-                ".//span[@class='selectable-text invisible-space copyable-text']"
+                ".//span[contains(@class,'selectable-text invisible-space copyable-text')]"
             ).text
-        except NoSuchElementException:
-            try:
-                message_container = messages.find_element_by_xpath(
-                    ".//div[@class='copyable-text']"
-                )
-                message = message_container.find_element_by_xpath(
-                    ".//img[@class='_2DV1k QkfD1 selectable-text invisible-space copyable-text']"
-                ).get_attribute("data-plain-text");
-            except NoSuchElementException:
-                pass
 
-    return message
+            emojis = []
+            for emoji in message_container.find_elements_by_xpath(
+                    ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
+            ):
+                emojis.append(emoji.get_attribute("data-plain-text"))
+
+        except NoSuchElementException:  # In case there are only emojis in the message
+            message_container = messages.find_element_by_xpath(
+                ".//div[@class='copyable-text']")
+
+            emojis = []
+            for emoji in message_container.find_elements_by_xpath(
+                    ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
+            ):
+                emojis.append(emoji.get_attribute("data-plain-text"))
+
+    return message, emojis
 
 
 def main():
@@ -108,10 +114,11 @@ def main():
 
     previous_in_message = ''
     while True:
-        last_in_message = read_last_in_message(driver)
+        last_in_message, emojis = read_last_in_message(driver)
 
         if previous_in_message != last_in_message:
             print last_in_message
+            print emojis
             previous_in_message = last_in_message
 
         time.sleep(1)
