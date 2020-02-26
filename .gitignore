@@ -1,4 +1,4 @@
-venv/
+env/
 geckodriver.log
 .vscode
 mysettings.txt
