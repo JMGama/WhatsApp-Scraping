@@ -6,7 +6,10 @@ import configparser
 import time
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def load_settings():
@@ -42,8 +45,9 @@ def load_driver(settings):
         driver = webdriver.Firefox(firefox_profile)
     elif settings['browser'] == 'chrome':
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('user-data-dir=' +
-                                    settings['browser_path'])
+        if settings['browser_path']:
+            chrome_options.add_argument('user-data-dir=' +
+                                        settings['browser_path'])
         driver = webdriver.Chrome(options=chrome_options)
     elif settings['browser'] == 'safari':
         pass
@@ -59,13 +63,24 @@ def search_chatter(driver, settings):
     """
 
     while True:
-        for chatter in driver.find_elements_by_xpath("//div[@class='X7YrQ']"):
-            chatter_name = chatter.find_element_by_xpath(
-                ".//span[contains(@class, '_19RFN')]").text
+        for chatter in driver.find_elements_by_xpath("//div[@id='pane-side']/div/div/div/div"):
+            chatter_path = "//span[contains(@title,'{}')]".format(
+                settings['name'])
+            try:
+                chatter_name = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, chatter_path))
+                ).text
+            except StaleElementReferenceException:
+                chatter_name = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, chatter_path))
+                ).text
+
             if chatter_name == settings['name']:
                 chatter.find_element_by_xpath(
-                    ".//div[contains(@class,'_2UaNq')]").click()
-                return
+                    ".//div/div").click()
+                return True
 
 
 def read_last_in_message(driver):
@@ -95,7 +110,7 @@ def read_last_in_message(driver):
                 message = ""
                 emojis = []
                 message_container = messages.find_element_by_xpath(
-                    ".//div[@class='copyable-text']")
+                    ".//div[contains(@class,'copyable-text')]")
 
                 for emoji in message_container.find_elements_by_xpath(
                         ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
@@ -116,17 +131,16 @@ def main():
     driver = load_driver(settings)
     driver.get(settings['page'])
 
-    search_chatter(driver, settings)
+    if search_chatter(driver, settings):
+        previous_in_message = None
+        while True:
+            last_in_message, emojis = read_last_in_message(driver)
 
-    previous_in_message = None
-    while True:
-        last_in_message, emojis = read_last_in_message(driver)
+            if previous_in_message != last_in_message:
+                print(last_in_message, emojis)
+                previous_in_message = last_in_message
 
-        if previous_in_message != last_in_message:
-            print(last_in_message, emojis)
-            previous_in_message = last_in_message
-
-        time.sleep(1)
+            time.sleep(1)
 
 
 if __name__ == '__main__':
