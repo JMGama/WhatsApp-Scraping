@@ -51,23 +51,32 @@ class WhatsappScrapper():
 
         while True:
             for chatter in self.driver.find_elements_by_xpath("//div[@id='pane-side']/div/div/div/div"):
-                chatter_path = "//span[contains(@title,'{}')]".format(
+                chatter_path = ".//span[@title='{}']".format(
                     name)
-                try:
-                    chatter_name = WebDriverWait(self.driver, 10).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, chatter_path))
-                    ).text
-                except StaleElementReferenceException:
-                    chatter_name = WebDriverWait(self.driver, 10).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, chatter_path))
-                    ).text
 
-                if chatter_name == name:
-                    chatter.find_element_by_xpath(
-                        ".//div/div").click()
-                    return True
+                # Wait until the chatter box is loaded in DOM
+                try:
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//span[contains(@title,'{}')]".format(
+                                name)))
+                    )
+                except StaleElementReferenceException:
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//span[contains(@title,'{}')]".format(
+                                name)))
+                    )
+
+                try:
+                    chatter_name = chatter.find_element_by_xpath(
+                        chatter_path).text
+                    if chatter_name == name:
+                        chatter.find_element_by_xpath(
+                            ".//div/div").click()
+                        return True
+                except Exception as e:
+                    pass
 
     def read_last_in_message(self):
         """
