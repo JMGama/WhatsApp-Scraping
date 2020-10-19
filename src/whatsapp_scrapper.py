@@ -115,3 +115,22 @@ class WhatsappScrapper():
                     pass
 
         return message, emojis
+
+    def send_message(self, text):
+        """
+        Send a message to the chatter.
+        You need to open a conversation with open_conversation()
+        before you can use this function.
+        """
+
+        input_text = self.driver.find_element_by_xpath(
+            "//div[@id='main']/footer/div/div[2]/div/div[@contenteditable='true']")
+
+        input_text.click()
+        input_text.send_keys(text)
+
+        send_button = self.driver.find_element_by_xpath(
+            "//div[@id='main']/footer/div/div[3]/button")
+        send_button.click()
+
+        return True
