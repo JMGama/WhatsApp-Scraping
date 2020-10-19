@@ -36,6 +36,7 @@ def main():
         settings['page'], settings['browser'], settings['browser_path'])
 
     if scrapper.open_conversation(settings['name']):
+        scrapper.send_message("hola")
         previous_in_message = None
         while True:
             last_in_message, emojis = scrapper.read_last_in_message()
