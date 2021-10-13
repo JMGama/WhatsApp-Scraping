@@ -12,10 +12,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 class WhatsappScrapper():
-    def __init__(self, page, browser, browser_path):
+    def __init__(self, page, browser, browser_path, driver_path):
         self.page = page
         self.browser = browser
         self.browser_path = browser_path
+        self.driver_path = driver_path
         self.driver = self.load_driver()
 
         # Open the web page with the given browser
@@ -36,7 +37,7 @@ class WhatsappScrapper():
             if self.browser_path:
                 chrome_options.add_argument('user-data-dir=' +
                                             self.browser_path)
-            driver = webdriver.Chrome(options=chrome_options)
+            driver = webdriver.Chrome(self.driver_path, options=chrome_options)
         elif self.browser == 'safari':
             pass
         elif self.browser == 'edge':
