@@ -9,19 +9,21 @@ def load_settings():
     Loading and assigning global variables from our settings.txt file
     """
     config_parser = configparser.RawConfigParser()
-    config_file_path = 'mysettings.txt'
+    config_file_path = 'settings.txt'
     config_parser.read(config_file_path)
 
     browser = config_parser.get('config', 'BROWSER')
     browser_path = config_parser.get('config', 'BROWSER_PATH')
     name = config_parser.get('config', 'NAME')
     page = config_parser.get('config', 'PAGE')
+    driver_path = config_parser.get('config', 'DRIVER_PATH')
 
     settings = {
         'browser': browser,
         'browser_path': browser_path,
         'name': name,
-        'page': page
+        'page': page,
+        'driver_path': driver_path
     }
     return settings
 
@@ -33,7 +35,7 @@ def main():
     """
     settings = load_settings()
     scrapper = WhatsappScrapper(
-        settings['page'], settings['browser'], settings['browser_path'])
+        settings['page'], settings['browser'], settings['browser_path'], settings['driver_path'])
 
     if scrapper.open_conversation(settings['name']):
         scrapper.send_message("hola")
