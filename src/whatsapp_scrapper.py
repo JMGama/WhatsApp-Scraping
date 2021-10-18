@@ -83,25 +83,25 @@ class WhatsappScrapper():
         """
         Reading the last message that you got in from the chatter
         """
+        message = ""
+        emojis = []
         for messages in self.driver.find_elements_by_xpath(
                 "//div[contains(@class,'message-in')]"):
             try:
-                message = ""
-                emojis = []
 
                 message_container = messages.find_element_by_xpath(
                     ".//div[@class='copyable-text']")
 
                 message = message_container.find_element_by_xpath(
-                    ".//span[contains(@class,'selectable-text invisible-space copyable-text')]"
+                    ".//span[contains(@class,'copyable-text')]"
                 ).text
 
                 for emoji in message_container.find_elements_by_xpath(
-                        ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
+                        ".//img[contains(@class,'copyable-text')]"
                 ):
                     emojis.append(emoji.get_attribute("data-plain-text"))
 
-            except NoSuchElementException:  # In case there are only emojis in the message
+            except NoSuchElementException as e:  # In case there are only emojis in the message
                 try:
                     message = ""
                     emojis = []
@@ -109,7 +109,7 @@ class WhatsappScrapper():
                         ".//div[contains(@class,'copyable-text')]")
 
                     for emoji in message_container.find_elements_by_xpath(
-                            ".//img[contains(@class,'selectable-text invisible-space copyable-text')]"
+                            ".//img[contains(@class,'copyable-text')]"
                     ):
                         emojis.append(emoji.get_attribute("data-plain-text"))
                 except NoSuchElementException:
