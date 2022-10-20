@@ -89,6 +89,7 @@ class WhatsappScrapper():
                 "//div[contains(@class,'message-in')]"):
             try:
 
+                # Get message
                 message_container = messages.find_element_by_xpath(
                     ".//div[@class='copyable-text']")
 
@@ -96,10 +97,15 @@ class WhatsappScrapper():
                     ".//span[contains(@class,'copyable-text')]"
                 ).text
 
+                # Get emojis
                 for emoji in message_container.find_elements_by_xpath(
                         ".//img[contains(@class,'copyable-text')]"
                 ):
                     emojis.append(emoji.get_attribute("data-plain-text"))
+
+                # Get quoted message
+                quote = message_container.find_element_by_xpath(
+                    ".//span[contains(@class,'quoted-mention')]").text
 
             except NoSuchElementException as e:  # In case there are only emojis in the message
                 try:
@@ -115,7 +121,7 @@ class WhatsappScrapper():
                 except NoSuchElementException:
                     pass
 
-        return message, emojis
+        return message, emojis, quote
 
     def send_message(self, text):
         """

@@ -38,13 +38,13 @@ def main():
         settings['page'], settings['browser'], settings['browser_path'], settings['driver_path'])
 
     if scrapper.open_conversation(settings['name']):
-        scrapper.send_message("hola")
+        # scrapper.send_message("hola")
         previous_in_message = None
         while True:
-            last_in_message, emojis = scrapper.read_last_in_message()
+            last_in_message, emojis, quote = scrapper.read_last_in_message()
 
             if previous_in_message != last_in_message:
-                print(last_in_message, emojis)
+                print(last_in_message, emojis, quote)
                 previous_in_message = last_in_message
 
             time.sleep(1)
