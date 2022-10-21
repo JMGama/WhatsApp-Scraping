@@ -87,6 +87,7 @@ class WhatsappScrapper():
         message_emojis = []
         quote = ""
         quote_emojis = []
+        quote_by = ""
 
         for messages in self.driver.find_elements_by_xpath(
                 "//div[contains(@class,'message-in')]"):
@@ -113,6 +114,9 @@ class WhatsappScrapper():
 
                 quote = quote_container.text
 
+                quote_by = message_container.find_element_by_xpath(
+                    ".//span[contains(@class,'i0jNr')]").text
+
                 # Get quoted emojis
                 for emoji in quote_container.find_elements_by_xpath(
                         ".//img[contains(@class,'emoji')]"
@@ -132,7 +136,7 @@ class WhatsappScrapper():
                 except NoSuchElementException:
                     pass
 
-        return message, message_emojis, quote, quote_emojis
+        return message, message_emojis, quote, quote_emojis, quote_by
 
     def send_message(self, text):
         """
