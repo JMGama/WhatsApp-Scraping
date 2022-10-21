@@ -41,10 +41,10 @@ def main():
         # scrapper.send_message("hola")
         previous_in_message = None
         while True:
-            last_in_message, emojis, quote = scrapper.read_last_in_message()
+            last_in_message, message_emojis, quote, quote_emojis = scrapper.read_last_in_message()
 
             if previous_in_message != last_in_message:
-                print(last_in_message, emojis, quote)
+                print(last_in_message, message_emojis, quote, quote_emojis)
                 previous_in_message = last_in_message
 
             time.sleep(1)
