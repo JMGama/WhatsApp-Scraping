@@ -84,7 +84,10 @@ class WhatsappScrapper():
         Reading the last message that you got in from the chatter
         """
         message = ""
-        emojis = []
+        message_emojis = []
+        quote = ""
+        quote_emojis = []
+
         for messages in self.driver.find_elements_by_xpath(
                 "//div[contains(@class,'message-in')]"):
             try:
@@ -101,27 +104,35 @@ class WhatsappScrapper():
                 for emoji in message_container.find_elements_by_xpath(
                         ".//img[contains(@class,'copyable-text')]"
                 ):
-                    emojis.append(emoji.get_attribute("data-plain-text"))
+                    message_emojis.append(
+                        emoji.get_attribute("data-plain-text"))
 
-                # Get quoted message
-                quote = message_container.find_element_by_xpath(
-                    ".//span[contains(@class,'quoted-mention')]").text
+               # Get quoted message
+                quote_container = message_container.find_element_by_xpath(
+                    ".//span[contains(@class,'quoted-mention')]")
+
+                quote = quote_container.text
+
+                # Get quoted emojis
+                for emoji in quote_container.find_elements_by_xpath(
+                        ".//img[contains(@class,'emoji')]"
+                ):
+                    quote_emojis.append(emoji.get_attribute("alt"))
 
             except NoSuchElementException as e:  # In case there are only emojis in the message
                 try:
-                    message = ""
-                    emojis = []
                     message_container = messages.find_element_by_xpath(
                         ".//div[contains(@class,'copyable-text')]")
 
                     for emoji in message_container.find_elements_by_xpath(
                             ".//img[contains(@class,'copyable-text')]"
                     ):
-                        emojis.append(emoji.get_attribute("data-plain-text"))
+                        message_emojis.append(
+                            emoji.get_attribute("data-plain-text"))
                 except NoSuchElementException:
                     pass
 
-        return message, emojis, quote
+        return message, message_emojis, quote, quote_emojis
 
     def send_message(self, text):
         """
